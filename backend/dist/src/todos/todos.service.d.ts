@@ -20,7 +20,9 @@ export declare class TodosService {
         id: number;
     }[]>;
     update(id: number, data: {
-        completed: boolean;
+        completed?: boolean;
+        text?: string;
+        category?: string;
     }): Promise<{
         category: string;
         completed: boolean;

@@ -20,7 +20,9 @@ export declare class TodosController {
         id: number;
     }[]>;
     update(id: number, body: {
-        completed: boolean;
+        completed?: boolean;
+        text?: string;
+        category?: string;
     }): Promise<{
         category: string;
         completed: boolean;
