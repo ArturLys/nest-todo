@@ -16,7 +16,10 @@ export class TodosController {
   }
 
   @Patch('todos/:id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() body: { completed: boolean }) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: { completed?: boolean; text?: string; category?: string },
+  ) {
     return this.todosService.update(id, body);
   }
 

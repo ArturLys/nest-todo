@@ -47,30 +47,50 @@ export class TodosService {
     });
   }
 
-  async update(id: number, data: { completed: boolean }) {
+  async update(id: number, data: { completed?: boolean; text?: string; category?: string }) {
     const todo = await this.prisma.todo.findUnique({ where: { id } });
     if (!todo) {
       throw new BadRequestException(`Todo with ID ${id} not found.`);
     }
 
-    // If we are marking as uncompleted (active), verify that this doesn't exceed the limit
-    if (data.completed === false && todo.completed === true) {
+    // If category is changing, verify the limit on the new category
+    if (data.category && data.category.trim() !== todo.category) {
       const activeCount = await this.prisma.todo.count({
         where: {
-          category: todo.category,
+          category: data.category.trim(),
           completed: false,
         },
       });
       if (activeCount >= 5) {
         throw new BadRequestException(
-          `Cannot restore task. Category "${todo.category}" already has the maximum of 5 active tasks.`,
+          `Cannot update task. Category "${data.category}" already has the maximum of 5 active tasks.`,
+        );
+      }
+    }
+
+    // If we are marking as uncompleted (active), verify that this doesn't exceed the limit
+    if (data.completed === false && todo.completed === true) {
+      const categoryToCheck = data.category ? data.category.trim() : todo.category;
+      const activeCount = await this.prisma.todo.count({
+        where: {
+          category: categoryToCheck,
+          completed: false,
+        },
+      });
+      if (activeCount >= 5) {
+        throw new BadRequestException(
+          `Cannot restore task. Category "${categoryToCheck}" already has the maximum of 5 active tasks.`,
         );
       }
     }
 
     return this.prisma.todo.update({
       where: { id },
-      data: { completed: data.completed },
+      data: { 
+        completed: data.completed,
+        text: data.text ? data.text.trim() : undefined,
+        category: data.category ? data.category.trim() : undefined,
+      },
     });
   }
 
