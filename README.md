@@ -1,8 +1,4 @@
-# ✨ NestJS & React Category-Based Todo App
-
-A premium, highly responsive category-based Todo application featuring a clean light/dark mode design, interactive category management, and strict validation.
-
----
+## Demo: https://nest-todo-mu.vercel.app/
 
 ## 🚀 Key Features
 
