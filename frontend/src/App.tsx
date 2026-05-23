@@ -42,8 +42,9 @@ export default function App() {
       const url = selectedCategory === 'All' ? `${API_URL}/todos` : `${API_URL}/todos?category=${encodeURIComponent(selectedCategory)}`
       const res = await axios.get<Todo[]>(url)
 
-      // Only show uncompleted tasks (completed tasks are "removed" from the active view)
-      const activeTodos = res.data.filter((todo) => !todo.completed)
+      // Defensive guard to prevent crashes if the API returns an HTML error page instead of an array
+      const rawData = Array.isArray(res.data) ? res.data : []
+      const activeTodos = rawData.filter((todo) => !todo.completed)
       setTodos(activeTodos)
     } catch (err: any) {
       console.error(err)
@@ -56,7 +57,7 @@ export default function App() {
   const fetchCategories = async () => {
     try {
       const res = await axios.get<string[]>(`${API_URL}/categories`)
-      setCategories(res.data)
+      setCategories(Array.isArray(res.data) ? res.data : [])
     } catch (err) {
       console.error('Failed to load categories', err)
     }
