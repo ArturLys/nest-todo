@@ -10,11 +10,6 @@ import type { Todo } from '@/types'
 import { CheckSquare, Square } from 'lucide-react'
 
 const getApiUrl = () => {
-  if (typeof window !== 'undefined') {
-    if (window.location.hostname.endsWith('vercel.app')) {
-      return `${window.location.origin}/_/backend`
-    }
-  }
   return import.meta.env.VITE_API_URL || 'http://localhost:3000'
 }
 
