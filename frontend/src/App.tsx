@@ -9,7 +9,16 @@ import { toast } from 'sonner'
 import type { Todo } from '@/types'
 import { CheckSquare, Square } from 'lucide-react'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+const getApiUrl = () => {
+  if (typeof window !== 'undefined') {
+    if (window.location.hostname.endsWith('vercel.app')) {
+      return `${window.location.origin}/_/backend`
+    }
+  }
+  return import.meta.env.VITE_API_URL || 'http://localhost:3000'
+}
+
+const API_URL = getApiUrl()
 
 export default function App() {
   const [todos, setTodos] = useState<Todo[]>([])
