@@ -1,4 +1,4 @@
-## Demo: https://nest-todo-mu.vercel.app/ (render backend might take a minute to load)
+## Demo: https://nest-todo-mu.vercel.app (render backend might take a minute to load)
 
 ## 🚀 Key Features
 
